@@ -10,9 +10,10 @@ if (global.timeOutUptime != undefined) clearTimeout(global.timeOutUptime);
 if (!config.autoUptime.enable) return;
 
 const PORT =
+  process.env.PORT ||
   config.dashBoard?.port ||
   (!isNaN(config.serverUptime.port) && config.serverUptime.port) ||
-  3001;
+  5000;
 
 let myUrl =
   config.autoUptime.url ||
@@ -80,8 +81,8 @@ app.get('/uptime', (req, res) => {
   res.json({ status: 'ok', message: 'Bot is online ✅' });
 });
 
-app.listen(PORT, () => {
-  log.info('DASHBOARD', `🌐 Running at http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  log.info('DASHBOARD', `🌐 Running at http://0.0.0.0:${PORT}`);
 });
 
 // -------- نظام الـ Auto Uptime --------
