@@ -3,74 +3,43 @@ const axios = require("axios");
 const path = require("path");
 const { getPrefix } = global.utils;
 const { commands, aliases } = global.NeroBot;
-const doNotDelete = "[ 🐐 | Nero ]";
 
 module.exports = {
 	config: {
 		name: "اوامر",
 		version: "1.17",
-		author: "NTKhang", // orginal author Kshitiz
+		author: "كـيـوي ےۦٰ۪۫٭",
 		countDown: 5,
 		role: 0,
-		shortDescription: {
-			ar: "عرض استخدام الأوامر وسرد كافة الأوامر مباشرة",
-		},
-		longDescription: {
-			ar: "عرض استخدام الأوامر وسرد كافة الأوامر مباشرة",
-		},
+		shortDescription: { ar: "عرض قائمة الأوامر" },
+		longDescription: { ar: "عرض استخدام الأوامر وسرد كافة الأوامر مباشرة" },
 		category: "النظام",
-		guide: {
-			ar: "{pn} / أوامر إسم الأمر ",
-		},
+		guide: { ar: "{pn} [اسم الأمر]" },
 		priority: 1,
 	},
 
 	onStart: async function ({ message, args, event, threadsData, role }) {
 		const { threadID } = event;
-		const threadData = await threadsData.get(threadID);
 		const prefix = getPrefix(threadID);
 
 		if (args.length === 0) {
 			const categories = {};
-			let msg = "";
-
-			msg += `╔═══════════════╗
-💫NERO  LIST 💫
-╚═══════════════╝`;
+			let msg = `◈ MARO SYSTEM ◈\n──────────────────\n📋 ┋ سجل الأوامر ┋\n`;
 
 			for (const [name, value] of commands) {
 				if (value.config.role > 1 && role < value.config.role) continue;
-
-				const category = value.config.category || "Uncategorized";
+				const category = value.config.category || "عام";
 				categories[category] = categories[category] || { commands: [] };
 				categories[category].commands.push(name);
 			}
 
 			Object.keys(categories).forEach(category => {
-				if (category !== "شرح") {
-					msg += `
-
-│『 ${category.toUpperCase()} 』`;
-
-					const names = categories[category].commands.sort();
-					for (let i = 0; i < names.length; i += 1) {
-						const cmds = names.slice(i, i + 1).map(item => `│⚜️${item}`);
-						msg += `
-${cmds.join(" ".repeat(Math.max(0, 5 - cmds.join("").length)))}`;
-					}
-
-					msg += `
-`;
-				}
+				msg += `\n• القسم: ${category.toUpperCase()}\n`;
+				const names = categories[category].commands.sort();
+				msg += `— ${names.join(" — ")}\n`;
 			});
 
-			const totalCommands = commands.size;
-			msg += `
-حاليا البوت لديه ${totalCommands} أمر يمكن إستخدامه
-`;
-			msg += `أكتب ${prefix} أوامر من أجل أن ترى كيفية إستخدام ذالك الأمر
-`;
-			msg += `✨   | Nero bot`;
+			msg += `\n──────────────────\nالمطور 👤 : كـيـوي ےۦٰ۪۫٭`;
 
 			await message.reply(msg);
 		} else {
@@ -78,33 +47,19 @@ ${cmds.join(" ".repeat(Math.max(0, 5 - cmds.join("").length)))}`;
 			const command = commands.get(commandName) || commands.get(aliases.get(commandName));
 
 			if (!command) {
-				await message.reply(` ❓ | الأمر "${commandName}" لم يتم إيجاده.`);
+				await message.reply(`◈ MARO SYSTEM ◈\n──────────────────\n❌ الأمر "${commandName}" غير موجود.`);
 			} else {
 				const configCommand = command.config;
-				const roleText = roleTextToString(configCommand.role);
-				const author = configCommand.author || "Unknown";
-
-				const longDescription = configCommand.longDescription ? configCommand.longDescription.ar || "لا وصف" : "No description";
-
-				const guideBody = configCommand.guide?.ar || "لا يوجد إرشاد في هذا الأمر.";
+				const guideBody = configCommand.guide?.ar || "لا يوجد شرح.";
 				const usage = guideBody.replace(/{p}/g, prefix).replace(/{n}/g, configCommand.name);
 
-				const response = `╭── الإسم ────⭓
-	│ ${configCommand.name}
-	├── معلومات
-	│ الوصف: ${longDescription}
-	│ أسماء أخرى : ${configCommand.aliases ? configCommand.aliases.join(", ") : "لا أملك "}
-	│ أسماء اخرى في مجموعتك لا أملك: لا أملك
-	│ الإصدار : ${configCommand.version || "1.0"}
-	│ الصلاحية : ${roleText}
-	│ وقت الإنتظار : ${configCommand.countDown || 1} ثانية
-	│ المؤلف : ${author}
-	├── كيفية الاستخدام 
-	│ ${usage}
-	├── ملاحظة 
-	│ المحتوى داخل المعقوفتين <XXXXX> يمكن تغييرها 
-  │ المحتوى داخل [a|b|c] هو a أو b أو c
-	╰━━━━━━━❖`;
+				const response = `◈ MARO SYSTEM ◈\n──────────────────\n` +
+					`إسم الأمر : ${configCommand.name}\n` +
+					`الوصف : ${configCommand.longDescription?.ar || "لا يوجد"}\n` +
+					`الصلاحية : ${roleTextToString(configCommand.role)}\n` +
+					`طريقة الإستخدام : ${usage}\n` +
+					`──────────────────\n` +
+					`المطور 👤 : كـيـوي ےۦٰ۪۫٭`;
 
 				await message.reply(response);
 			}
@@ -112,15 +67,6 @@ ${cmds.join(" ".repeat(Math.max(0, 5 - cmds.join("").length)))}`;
 	},
 };
 
-function roleTextToString(roleText) {
-	switch (roleText) {
-		case 0:
-			return "0 (الجميع)";
-		case 1:
-			return "1 (فقط الآدمن)";
-		case 2:
-			return "2 (المطور)";
-		default:
-			return "مجهول";
-	}
+function roleTextToString(role) {
+	return role === 0 ? "الجميع" : role === 1 ? "الآدمن" : "المطور";
 }

@@ -1,116 +1,105 @@
 const { getTime, drive } = global.utils;
 
 if (!global.temp.welcomeEvent)
-	global.temp.welcomeEvent = {};
+global.temp.welcomeEvent = {};
 
 module.exports = {
-  config: {
-    name: "welcome",
-    version: "1.5",
-    author: "SIFOANTER ",
-    category: "events",
-  },
+config: {
+name: "welcome",
+version: "2.5",
+author: "maru", // تم التحديث بلمسة مارو ⚖️
+category: "events",
+},
 
-  langs: {
-    // لغاتك هنا
-		ar: {
-			session1:  "الصباح",
-			session2: " الظهر",
-			session3: " مابعد الظهر",
-			session4: " المساء",
-			welcomeMessage: "[✨] تــــم توصيل نيرو ",
-			multiple1: "بك",
-			multiple2: "بكم يا أصدقاء",
-			defaultWelcomeMessage: `┌────━━❖🧿❖━━─────┐\n⚜️الأسم : 『{userName}』.\n💮________༺🖤༻________💮\n⚜️إسم المجموعة  : 『{boxName}』\n💮________༺🖤༻________💮\n⚜️الوقت : 『{session}』  \n💮________༺🖤༻________💮\n🔖ولا تنسى يا 『{userName}』 اللفظ و إن ضاق بك الرد\n└────━━❖🧿❖━━─────┘` 
-    }
-  },
+langs: {
+ar: {
+session1: "فجر يوم جديد 🌅",
+session2: "وقت الظهيرة ☀️",
+session3: "ما بعد الظهر 💼",
+session4: "هدوء المساء 🌙",
 
-  onStart: async ({ threadsData, message, event, api, getLang }) => {
-    if (event.logMessageType !== "log:subscribe") return;
+// بطاقة تعريفية للبوت عند التفعيل:
+welcomeMessage: `┌─── ･ ｡ﾟ☆: *.⚖️.* :☆ﾟ. ───┐\n\n *Hii! I'm Maro system* ⚡\n\n أنظمة دقيقة، تحكم كامل، وبصمة ثابتة..\n جاهز لإدارة العمليات! 🔱\n\n└─── ･ ｡ﾟ☆: *.⚡.* :☆ﾟ. ───┘`,
 
-    const hours = getTime("HH");
-    const { threadID } = event;
-    const { nickNameBot } = global.NeroBot.config;
-    const prefix = global.utils.getPrefix(threadID);
-    const dataAddedParticipants = event.logMessageData.addedParticipants;
+multiple1: "بك",
+multiple2: "بكم جميعاً",
+defaultWelcomeMessage: `┌────━━━ ❖ ⚖️ ❖ ━━━────┐\n\n ◇ 𓊈 ⚡ مـارو يـرحب {multiple} ⚡ 𓊉 ◇\n\n┝━━━━━━━━━━━━━━━\n┇ 🔱 أهلاً بـ 『 {userName} 』\n┝━━━━━━━━━━━━━━━\n┇ ⚖️ المجمـوعة: 『 {boxName} 』\n┝━━━━━━━━━━━━━━━\n┇ ⏳ الوقـت: 『 {session} 』\n┝━━━━━━━━━━━━━━━\n\n ⚡ نتمنى لكم تواجد مثمر وفعال هنا! 🔱\n\n└────━━━ ❖ ⚖️ ❖ ━━━────┘`
+}
+},
 
-    if (dataAddedParticipants.some((item) => item.userFbId === api.getCurrentUserID())) {
-      if (nickNameBot) api.changeNickname(nickNameBot, threadID, api.getCurrentUserID());
+onStart: async ({ threadsData, message, event, api, getLang }) => {
+if (event.logMessageType !== "log:subscribe") return;
 
-      return message.send(getLang("welcomeMessage", prefix));
-    }
+const hours = getTime("HH");
+const { threadID } = event;
+const prefix = global.utils.getPrefix(threadID);
+const dataAddedParticipants = event.logMessageData.addedParticipants;
 
-    if (!global.temp.welcomeEvent[threadID]) {
-      global.temp.welcomeEvent[threadID] = {
-        joinTimeout: null,
-        dataAddedParticipants: [],
-      };
-    }
+// التحقق من انضمام البوت نفسه
+if (dataAddedParticipants.some((item) => item.userFbId === api.getCurrentUserID())) {
+return message.send(getLang("welcomeMessage", prefix));
+}
 
-    global.temp.welcomeEvent[threadID].dataAddedParticipants.push(...dataAddedParticipants);
-    clearTimeout(global.temp.welcomeEvent[threadID].joinTimeout);
+if (!global.temp.welcomeEvent[threadID]) {
+global.temp.welcomeEvent[threadID] = {
+joinTimeout: null,
+dataAddedParticipants: [],
+};
+}
 
-    global.temp.welcomeEvent[threadID].joinTimeout = setTimeout(async function () {
-      const dataAddedParticipants = global.temp.welcomeEvent[threadID].dataAddedParticipants;
-      const threadData = await threadsData.get(threadID);
-      const dataBanned = threadData.data.banned_ban || [];
+global.temp.welcomeEvent[threadID].dataAddedParticipants.push(...dataAddedParticipants);
+clearTimeout(global.temp.welcomeEvent[threadID].joinTimeout);
 
-      if (threadData.settings.sendWelcomeMessage === false) return;
+global.temp.welcomeEvent[threadID].joinTimeout = setTimeout(async function () {
+const dataAddedParticipants = global.temp.welcomeEvent[threadID].dataAddedParticipants;
+const threadData = await threadsData.get(threadID);
 
-      const threadName = threadData.threadName;
-      const userName = [];
-      const mentions = [];
-      let multiple = false;
+if (threadData.settings.sendWelcomeMessage === false) return;
 
-      if (dataAddedParticipants.length > 1) multiple = true;
+const threadName = threadData.threadName;
+const userName = [];
+const mentions = [];
+let multiple = dataAddedParticipants.length > 1;
 
-      for (const user of dataAddedParticipants) {
-        if (dataBanned.some((item) => item.id === user.userFbId)) continue;
-        userName.push(user.fullName);
-        mentions.push({
-          tag: user.fullName,
-          id: user.userFbId,
-        });
-      }
+for (const user of dataAddedParticipants) {
+userName.push(user.fullName);
+mentions.push({
+tag: user.fullName,
+id: user.userFbId,
+});
+}
 
-      if (userName.length === 0) return;
+if (userName.length === 0) return;
 
-      let { welcomeMessage = getLang("defaultWelcomeMessage") } = threadData.data;
-      const form = {
-        mentions: welcomeMessage.match(/\{userNameTag\}/g) ? mentions : null,
-      };
+let { welcomeMessage = getLang("defaultWelcomeMessage") } = threadData.data;
 
-      welcomeMessage = welcomeMessage
-        .replace(/\{userName\}|\{userNameTag\}/g, userName.join(", "))
-        .replace(/\{boxName\}|\{threadName\}/g, threadName)
-        .replace(/\{multiple\}/g, multiple ? getLang("multiple2") : getLang("multiple1"))
-        .replace(
-          /\{session\}/g,
-          hours <= 10
-            ? getLang("session1")
-            : hours <= 12
-            ? getLang("session2")
-            : hours <= 18
-            ? getLang("session3")
-            : getLang("session4")
-        );
+// تعديل المنشن ليعمل دائماً
+const form = {
+body: "",
+mentions: mentions
+};
 
-      form.body = welcomeMessage;
+welcomeMessage = welcomeMessage
+.replace(/\{userName\}|\{userNameTag\}/g, userName.join(", "))
+.replace(/\{boxName\}|\{threadName\}/g, threadName)
+.replace(/\{multiple\}/g, multiple ? getLang("multiple2") : getLang("multiple1"))
+.replace(/\{session\}/g, hours <= 10 ? getLang("session1") : hours <= 12 ? getLang("session2") : hours <= 18 ? getLang("session3") : getLang("session4"));
 
-      // إضافة الصورة الرمزية للمستخدم
-      if (threadData.data.welcomeAttachment) {
-        const files = threadData.data.welcomeAttachment;
-        const attachments = files.reduce((acc, file) => {
-          acc.push(drive.getFile(file, "stream"));
-          return acc;
-        }, []);
-        form.attachment = (await Promise.allSettled(attachments))
-          .filter(({ status }) => status === "fulfilled")
-          .map(({ value }) => value);
-      }
+form.body = welcomeMessage;
 
-      message.send(form);
-      delete global.temp.welcomeEvent[threadID];
-    }, 1500);
-  },
+if (threadData.data.welcomeAttachment) {
+const files = threadData.data.welcomeAttachment;
+const attachments = files.reduce((acc, file) => {
+acc.push(drive.getFile(file, "stream"));
+return acc;
+}, []);
+form.attachment = (await Promise.allSettled(attachments))
+.filter(({ status }) => status === "fulfilled")
+.map(({ value }) => value);
+}
+
+message.send(form);
+delete global.temp.welcomeEvent[threadID];
+}, 1500);
+},
 };

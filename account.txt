@@ -1,44 +1,44 @@
 [
   {
-    "key": "sb",
-    "value": "9GHSaPgIDNEqr-hHnlZaMng4",
+    "key": "datr",
+    "value": "QCk4apI5tJEJD_nVgScsIEEL",
     "domain": "facebook.com",
     "path": "/",
     "hostOnly": false,
-    "creation": "2026-06-21T21:58:01.652Z",
-    "lastAccessed": "2026-06-21T21:58:01.653Z"
+    "creation": "2026-06-23T22:01:10.149Z",
+    "lastAccessed": "2026-06-23T22:01:11.010Z"
   },
   {
-    "key": "datr",
-    "value": "4IjmaNyzLX3nbM20K3Hqvc2E",
+    "key": "sb",
+    "value": "QCk4aqKA8CPP-zKGee0hi7bv",
     "domain": "facebook.com",
     "path": "/",
     "hostOnly": false,
-    "creation": "2026-06-21T21:58:01.653Z",
-    "lastAccessed": "2026-06-21T21:58:01.653Z"
+    "creation": "2026-06-23T22:01:10.149Z",
+    "lastAccessed": "2026-06-23T22:01:11.010Z"
   },
   {
     "key": "c_user",
-    "value": "61581575196040",
+    "value": "100025723472313",
     "domain": "facebook.com",
     "path": "/",
     "hostOnly": false,
-    "creation": "2026-06-21T21:58:01.653Z",
-    "lastAccessed": "2026-06-21T21:58:01.653Z"
+    "creation": "2026-06-23T22:01:10.149Z",
+    "lastAccessed": "2026-06-23T22:01:11.010Z"
   },
   {
     "key": "xs",
-    "value": "42%3A6J8ol7ch8X671g%3A2%3A1760002889%3A-1%3A-1",
+    "value": "36%3AJIXW0MaWhVR_9w%3A2%3A1782065742%3A-1%3A-1",
     "domain": "facebook.com",
     "path": "/",
     "hostOnly": false,
-    "creation": "2026-06-21T21:58:01.653Z",
-    "lastAccessed": "2026-06-21T21:58:01.653Z"
+    "creation": "2026-06-23T22:01:10.149Z",
+    "lastAccessed": "2026-06-23T22:01:11.010Z"
   },
   {
     "key": "fr",
-    "value": "1MRMwHrICVBuQl2YB.AWdIk8mEuCizGAUmBE8JPJ0vhYXqGLq5R_TNhv8hfirO5gV57jI.Bo5lRa..AAA.0.0.Bo541f.AWcV3d1atTs_U2EI5FTHTACOXN8",
-    "expires": "2026-01-07T10:24:31.000Z",
+    "value": "0osunyjDsciPLORbC.AWcGQjs1eyWTGcf2bN9Cow1h52stvz9SQQVJE0ihIVszlnxjEqM.BqOClA..AAA.0.0.BqOwIm.AWdftvont2Y2Sied0LUlGDhF_pM",
+    "expires": "2026-09-21T22:01:10.000Z",
     "maxAge": 7776000,
     "domain": "facebook.com",
     "path": "/",
@@ -48,7 +48,7 @@
       "SameSite=None"
     ],
     "hostOnly": false,
-    "creation": "2026-06-21T21:58:01.653Z",
-    "lastAccessed": "2026-06-21T21:58:01.653Z"
+    "creation": "2026-06-23T22:01:10.149Z",
+    "lastAccessed": "2026-06-23T22:01:11.010Z"
   }
 ]
